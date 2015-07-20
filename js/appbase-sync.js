@@ -6,9 +6,9 @@ define(['pubsub', 'jquery', 'io', 'colorpicker'], function(PubSub, $, io) {
     socket.emit( 'add-node', {} );
   });
 
-  $('button.remove-all-node').on('click', function() {
-    socket.emit( 'remove-all-nodes' );
-  });
+  // $('button.remove-all-node').on('click', function() {
+  //   socket.emit( 'remove-all-nodes' );
+  // });
 
   PubSub.subscribe('forceView:node-edited', function(msg, node) {
     $('#textColorNode').val(node.color);

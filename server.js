@@ -63,16 +63,16 @@ io.on('connection', function(socket){
 
   });
 
-  socket.on('remove-all-nodes', function() {
-    Appbase.ns(namespace).on('vertex_added', function(err, vertexRef, obj) {
-      if (err) {
-        console.error( 'remove-all-nodes', err );
-      } else {
-        vertexRef.destroy();
-        socket.emit( 'node-removed', vertexRef.name() );
-      }
-    });
-  });
+  // socket.on('remove-all-nodes', function() {
+  //   Appbase.ns(namespace).on('vertex_added', function(err, vertexRef, obj) {
+  //     if (err) {
+  //       console.error( 'remove-all-nodes', err );
+  //     } else {
+  //       vertexRef.destroy();
+  //       socket.emit( 'node-removed', vertexRef.name() );
+  //     }
+  //   });
+  // });
 
   socket.on('add-node', function( node, cb ) {
     var id = Appbase.uuid(), vref = nsref.v(id);
