@@ -11,7 +11,7 @@ var express = require('express'),
 app.use(express.static(__dirname + '/'));
 
 io.on('connection', function(socket){
-  var namespace = "my-first-namespace", nsref = Appbase.ns(namespace);
+  var namespace, nsref;
 
 
   /**
@@ -22,6 +22,8 @@ io.on('connection', function(socket){
     then new learners can use my API calls left. Thanks.
   **/
   Appbase.credentials("dbas_with_socket_io", "a7b27d02b9853ef334ee143ee338f7f0");
+  namespace = "my-first-namespace";
+  nsref = Appbase.ns(namespace);
   /* END */
 
   console.log('a user connected');
