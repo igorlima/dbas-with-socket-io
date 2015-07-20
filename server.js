@@ -19,7 +19,7 @@ Appbase.credentials("sample_app_with_d3", "3792bb2bddd86bf8f6a70522bae1f797");
 app.use(express.static(__dirname + '/'));
 
 io.on('connection', function(socket){
-  var nsref = Appbase.ns( "my-first-namespace" );
+  var namespace = "my-first-namespace", nsref = Appbase.ns(namespace);
 
   console.log('a user connected');
   socket.on('disconnect', function(){
@@ -62,7 +62,7 @@ io.on('connection', function(socket){
   });
 
   socket.on('remove-all-nodes', function() {
-    nsref.on('vertex_added', function(err, vertexRef, obj) {
+    Appbase.ns(namespace).on('vertex_added', function(err, vertexRef, obj) {
       if (err) {
         console.error( 'remove-all-nodes', err );
       } else {
