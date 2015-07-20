@@ -23,6 +23,8 @@ io.on('connection', function(socket){
 
   console.log('a user connected');
   socket.on('disconnect', function(){
+    nsref.off('vertex_added');
+    nsref.off('vertex_removed');
     console.log('user disconnected');
   });
 
