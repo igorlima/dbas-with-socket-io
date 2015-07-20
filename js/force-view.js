@@ -114,7 +114,7 @@ define(['d3', 'jquery', 'pubsub'], function(d3, $, PubSub) {
 
         // add link to mousedown node
         links.push(link);
-        PubSub.publish('forceView:addedNodeAndLink', {
+        PubSub.publish('forceView:node-and-link-added', {
           node: node,
           link: link
         });
@@ -208,7 +208,7 @@ define(['d3', 'jquery', 'pubsub'], function(d3, $, PubSub) {
             // redraw();
           })
         .on("dblclick", function(d) {
-            PubSub.publish('forceView:editedNode', d);
+            PubSub.publish('forceView:node-edited', d);
           })
         .on("mouseup", 
           function(d) { 
@@ -219,7 +219,7 @@ define(['d3', 'jquery', 'pubsub'], function(d3, $, PubSub) {
               // add link
               var link = {source: mousedown_node, target: mouseup_node};
               links.push(link);
-              PubSub.publish('forceView:addedLink', link);
+              PubSub.publish('forceView:link-added', link);
 
               // select new link
               selected_link = link;
@@ -274,11 +274,11 @@ define(['d3', 'jquery', 'pubsub'], function(d3, $, PubSub) {
         if (selected_node) {
           nodes.splice(nodes.indexOf(selected_node), 1);
           spliceLinksForNode(selected_node);
-          PubSub.publish('forceView:deletedNode', selected_node);
+          PubSub.publish('forceView:node-removed', selected_node);
         }
         else if (selected_link) {
           links.splice(links.indexOf(selected_link), 1);
-          PubSub.publish('forceView:deletedLink', selected_link);
+          PubSub.publish('forceView:link-removed', selected_link);
         }
         selected_link = null;
         selected_node = null;
@@ -314,7 +314,7 @@ define(['d3', 'jquery', 'pubsub'], function(d3, $, PubSub) {
     redraw();
     callback && callback();
   });
-  PubSub.subscribe('forceView:deleteNode', function(msg, node) {
+  PubSub.subscribe('forceView:remove-node', function(msg, node) {
     var selected_node = searchNode(node);
     if (selected_node) {
       nodes.splice(nodes.indexOf(selected_node), 1);
@@ -322,7 +322,7 @@ define(['d3', 'jquery', 'pubsub'], function(d3, $, PubSub) {
       redraw();
     }
   });
-  PubSub.subscribe('forceView:deleteLink', function(msg, link) {
+  PubSub.subscribe('forceView:remove-link', function(msg, link) {
     var source, target, selected_link;
     source = searchNode(link.source);
     target = searchNode(link.target);
@@ -332,14 +332,14 @@ define(['d3', 'jquery', 'pubsub'], function(d3, $, PubSub) {
       redraw();
     }
   });
-  PubSub.subscribe('forceView:addNode', function(msg, node) {
+  PubSub.subscribe('forceView:add-node', function(msg, node) {
     var selected_node = searchNode(node);
     if (!selected_node) {
       nodes.push(node);
       redraw();
     }
   });
-  PubSub.subscribe('forceView:addLink', function(msg, link) {
+  PubSub.subscribe('forceView:add-link', function(msg, link) {
     var source, target, selected_link;
     link = link || {};
     source = searchNode(link.source);
@@ -350,7 +350,7 @@ define(['d3', 'jquery', 'pubsub'], function(d3, $, PubSub) {
       redraw();
     }
   });
-  PubSub.subscribe('forceView:editNode', function(msg, node) {
+  PubSub.subscribe('forceView:edit-node', function(msg, node) {
     var selected_node = searchNode(node);
     if (selected_node) {
       $.extend(selected_node, node);

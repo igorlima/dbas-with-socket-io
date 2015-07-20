@@ -65,10 +65,10 @@ io.on('connection', function(socket){
     nsref.on('vertex_added', function(err, vertexRef, obj) {
       if (err) {
         console.error( 'remove-all-nodes', err );
-        return;
+      } else {
+        vertexRef.destroy();
+        socket.emit( 'node-removed', vertexRef.name() );
       }
-      vertexRef.destroy();
-      socket.emit( 'node-removed', vertexRef.name() );
     });
   });
 
@@ -85,15 +85,17 @@ io.on('connection', function(socket){
   });
 
   socket.on('edit-node', function(node) {
-    if (!node || !node.id) return;
-    nsref.v(node.id).setData(node);
-    socket.emit( 'node-edited', node );
+    if (node && node.id) {
+      nsref.v(node.id).setData(node);
+      socket.emit( 'node-edited', node );
+    }
   } );
 
   socket.on('remove-node', function(node) {
-    if (!node || !node.id) return;
-    nsref.v(node.id).destroy();
-    socket.emit( 'node-removed', node.id );
+    if (node && node.id) {
+      nsref.v(node.id).destroy();
+      socket.emit( 'node-removed', node.id );
+    }
   });
 
   socket.on('add-link', function(link) {
@@ -105,17 +107,18 @@ io.on('connection', function(socket){
     source.setEdge( id, target, function(error) {
       if (error) {
         console.error( 'add-link', error );
-        return;
+      } else {
+        link.id = id;
+        socket.emit( 'link-added', link );
       }
-      link.id = id;
-      socket.emit( 'link-added', link );
     } );
   });
 
   socket.on('remove-link', function(link) {
-    if (!link || !link.id) return;
-    nsref.v( link.target.id ).removeEdge( [link.id] );
-    socket.emit( 'link-removed', link );
+    if (link && link.id) {
+      nsref.v( link.target.id ).removeEdge( [link.id] );
+      socket.emit( 'link-removed', link );
+    }
   });
 
 });
